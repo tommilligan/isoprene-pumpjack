@@ -1,0 +1,6 @@
+# pip requirements file
+# install with `pip install -r requirements.txt`
+
+Flask ~= 0.12
+Flask-RESTful ~= 0.3.5
+Flask-cors ~= 3.0.2
