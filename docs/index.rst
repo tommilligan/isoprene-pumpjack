@@ -6,16 +6,9 @@
 isoprene-pumpjack
 =============================================
 
-.. qrefflask:: isoprene_pumpjack:app
-   :undoc-static:
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
-Api details!
-=======================================
 
 .. autoflask:: isoprene_pumpjack:app
    :undoc-static:
