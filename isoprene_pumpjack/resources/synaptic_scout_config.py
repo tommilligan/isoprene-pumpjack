@@ -12,8 +12,9 @@ from isoprene_pumpjack.utils import object_logger
 config = {
     'endpoints': [
         {
-            'id': 'data',
-            'url': '/data',
+            'name': 'subgraphs',
+            'on': 'clickNode',
+            'url': '/subgraphs',
         }
     ],
     'types': [

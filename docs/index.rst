@@ -13,12 +13,16 @@ isoprene-pumpjack
 Installation
 ------------
 
-`pip install isoprene-pumpjack`
+Install with pip::
+
+    pip install isoprene-pumpjack
 
 Use
 ---
 
-Run `isoprene-pumpjack` from the command line to run with Flask dev server.
+To run with Flask dev server::
+
+    isoprene-pumpjack
 
 API
 ---
