@@ -10,11 +10,24 @@ isoprene-pumpjack
    :maxdepth: 2
    :caption: Contents:
 
+Installation
+------------
+
+`pip install isoprene-pumpjack`
+
+Use
+---
+
+Run `isoprene-pumpjack` from the command line to run with Flask dev server.
+
+API
+---
+
 .. autoflask:: isoprene_pumpjack:app
    :undoc-static:
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
