@@ -55,7 +55,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'isoprene-pumpjack = isoprene_pumpjack:main'
+            'isoprene-pumpjack = isoprene_pumpjack.api:main'
         ]
     },
 )

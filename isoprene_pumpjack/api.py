@@ -12,9 +12,6 @@ from isoprene_pumpjack.resources.synaptic_scout_config import SynapticScoutConfi
 
 # Define Flask app
 app = Flask(__name__)
-app.config.update({
-    "APPLICATION_ROOT": "/synaptic-scout/v1"
-})
 cors = CORS(app)
 api = Api(app)
 
