@@ -59,7 +59,7 @@ setup(
     tests_require=['nose2'],
     # Install these with "pip install -e isoprene_pumpjack[dev]
     extras_require={
-        'dev': [
+        'docs': [
             'sphinx',
             'sphinx-argparse',
             'sphinx-rtdtheme',
