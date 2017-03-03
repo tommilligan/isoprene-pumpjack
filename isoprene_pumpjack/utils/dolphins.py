@@ -251,7 +251,7 @@ dolphins = {
       "label": "Zipfel"
     }
   ],
-  "edges": [
+  "links": [
     {
       "source": "8",
       "target": "3"
