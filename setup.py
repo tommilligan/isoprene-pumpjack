@@ -4,11 +4,19 @@ import re
 from os import path
 from setuptools import setup, find_packages
 
-requirements = [
-    'Flask ~= 0.12',
-    'Flask-RESTful ~= 0.3.5',
-    'Flask-cors ~= 3.0.2'
-]
+
+version_file = path.join(
+    path.dirname(__file__),
+    'isoprene_pumpjack',
+    '__version__.py'
+)
+with open(version_file, 'r') as fp:
+    m = re.search(
+        r"^__version__ = ['\"]([^'\"]*)['\"]",
+        fp.read(),
+        re.M
+    )
+    version = m.groups(1)[0]
 
 version_file = path.join(
     path.dirname(__file__),
@@ -42,7 +50,12 @@ setup(
     zip_safe=False,
     platforms='any',
     test_suite='nose2.collector.collector',
-    install_requires=requirements,
+    install_requires=[
+        'Flask ~= 0.12',
+        'Flask-RESTful ~= 0.3.5',
+        'Flask-cors ~= 3.0.2',
+        'gunicorn ~= 19.6.0'
+    ],
     tests_require=['nose2'],
     # Install these with "pip install -e isoprene_pumpjack[dev]
     extras_require={
