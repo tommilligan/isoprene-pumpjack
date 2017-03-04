@@ -14,7 +14,3 @@ def object_logger(obj):
     logger = logging.getLogger(fullname)
     return logger
 
-def dedupe_dict_list(duped, id_prop):
-    '''Dedupe a list of dicts by a dictionary property'''
-    deduped = list({v[id_prop]:v for v in duped}.values())
-    return deduped
