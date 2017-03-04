@@ -10,7 +10,7 @@ JSON responses are given in the format:
     { id: 'n0' },
     { id: 'n1' }
   ],
-  edges: [
+  links: [
     {
       id: 'e0',
       source: 'n0',
@@ -36,12 +36,12 @@ def get_full_graph():
     return dolphins
 
 def get_sub_graph(central_node_id):
-    '''Quick and dirty subgraph - throw away most nodes and corresponding edges
+    '''Quick and dirty subgraph - throw away most nodes and corresponding links
     '''
     nodes_subset = random.sample(dolphins['nodes'], 7)
     subset = {
         'nodes': nodes_subset,
-        'edges': dolphins['edges']
+        'links': dolphins['links']
     }
     return subset
 

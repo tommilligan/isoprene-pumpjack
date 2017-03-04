@@ -23,7 +23,7 @@ api.add_resource(SynapticScoutConfig, '/configuration/synaptic-scout')
 # Development only - full graph would probably break in prod
 api.add_resource(FullGraph, '/fullgraph')
 # Subgraph centered on node_id
-api.add_resource(SubGraph, '/subgraphs/<string:central_node_id>')
+api.add_resource(SubGraph, '/subgraph/<string:central_node_id>')
 
 
 def main():
