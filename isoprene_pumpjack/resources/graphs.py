@@ -7,39 +7,15 @@ JSON responses are given in the format:
 '''
 
 from flask_restful import Resource
-from neo4j.v1 import GraphDatabase, basic_auth
 
-import isoprene_pumpjack.constants.environment as ip_env
+from isoprene_pumpjack.constants.environment import bolt_driver
 import isoprene_pumpjack.utils as utils
-from isoprene_pumpjack.utils.dolphins import dolphins
 import isoprene_pumpjack.utils.neo_to_d3 as neo_to_d3
 
 
-driver = GraphDatabase.driver(
-    ip_env.ISOPRENE_PUMPJACK_BOLT_URL,
-    auth=basic_auth(
-        ip_env.ISOPRENE_PUMPJACK_BOLT_USER,
-        ip_env.ISOPRENE_PUMPJACK_BOLT_PASSWORD
-    )
-)
-
-
-def set_graph(data):
-    with driver.session() as session:
-        session.run("MATCH (n) DETACH DELETE n")
-
-        for node in data["nodes"]:
-            session.run("CREATE (a:Dolphin {id: {id}, label: {label}})",
-                        node)
-
-        for link in data["links"]:
-            session.run("""MATCH (s:Dolphin {id: {source}}), (t:Dolphin {id: {target}})
-                        CREATE (s)-[:knows]->(t)""",
-                        link)
-
 def get_full_graph():
     '''Transparently pass all database data'''
-    with driver.session() as session:
+    with bolt_driver.session() as session:
         result = session.run("""MATCH (d)-[r]-()
                         RETURN d, r""")
     
@@ -49,7 +25,7 @@ def get_full_graph():
 def get_sub_graph(central_node_id):
     '''Quick and dirty subgraph - throw away most nodes and corresponding links
     '''
-    with driver.session() as session:
+    with bolt_driver.session() as session:
         result = session.run("""MATCH (s)-[r*1..2]-(t)
                         WHERE s.id = {id}
                         RETURN s, r, t""",
@@ -69,18 +45,6 @@ class SubGraph(Resource):
         self.logger.debug('Getting sub graph for {0}'.format(central_node_id))
         sub_graph = get_sub_graph(central_node_id)
         return sub_graph, 200
-
-
-class ResetDolphins(Resource):
-    '''Debug endpoint - reset neo4j'''
-    def __init__(self):
-        self.logger = utils.object_logger(self)
-
-    def get(self):
-        '''Drop database and upload dolphins JSON data into Neo4j'''
-        self.logger.debug('Resetting neo4j to dolphins')
-        set_graph(dolphins)
-        return {}, 200
 
 
 class FullGraph(Resource):

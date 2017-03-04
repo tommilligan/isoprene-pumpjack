@@ -8,7 +8,9 @@ from flask_restful import Api
 from flask_cors import CORS
 
 from isoprene_pumpjack.resources.discovery import Discovery
-from isoprene_pumpjack.resources.graphs import SubGraph, FullGraph, ResetDolphins
+from isoprene_pumpjack.resources.graphs import SubGraph, FullGraph
+from isoprene_pumpjack.resources.search import SearchDolphins
+from isoprene_pumpjack.resources.dev import ResetDolphins
 from isoprene_pumpjack.resources.synaptic_scout_config import SynapticScoutConfig
 
 
@@ -21,10 +23,12 @@ api = Api(app)
 api.add_resource(Discovery, '/')
 api.add_resource(SynapticScoutConfig, '/configuration/synaptic-scout')
 # Development only - full graph would probably break in prod
-api.add_resource(ResetDolphins, '/resetgraph')
+api.add_resource(ResetDolphins, '/reset')
 api.add_resource(FullGraph, '/fullgraph')
 # Subgraph centered on node_id
 api.add_resource(SubGraph, '/subgraph/<string:central_node_id>')
+
+api.add_resource(SearchDolphins, '/search')
 
 
 def main():
