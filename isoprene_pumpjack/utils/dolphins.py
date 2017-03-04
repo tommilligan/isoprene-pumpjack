@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+'''
+Test data for setting and working with the neo graph
+'''
 
 dolphins = {
   "nodes": [
