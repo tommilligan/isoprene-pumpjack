@@ -55,7 +55,7 @@ setup(
         'Flask-RESTful ~= 0.3.5',
         'Flask-cors ~= 3.0.2',
         'gunicorn ~= 19.6.0',
-        'neo4j-driver ~= 1.1.2''
+        'neo4j-driver ~= 1.1.2'
     ],
     tests_require=['nose2'],
     # Install these with "pip install -e isoprene_pumpjack[dev]
