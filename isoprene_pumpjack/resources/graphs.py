@@ -26,7 +26,7 @@ def get_sub_graph(central_node_id):
     '''Quick and dirty subgraph - throw away most nodes and corresponding links
     '''
     with bolt_driver.session() as session:
-        result = session.run("""MATCH (s)-[r*1..2]-(t)
+        result = session.run("""MATCH (s)-[r*1]-(t)
                         WHERE s.id = {id}
                         RETURN s, r, t""",
                         {"id": central_node_id})
