@@ -10,4 +10,8 @@ install:
 # command to run tests
 script: nose2 --with-coverage
 after_sucess:
-  - CODECLIMATE_REPO_TOKEN=${CODECLIMATE_REPO_TOKEN} codeclimate-test-reporter
+  - CODECLIMATE_REPO_TOKEN=$CODECLIMATE_REPO_TOKEN codeclimate-test-reporter
+deploy:
+  provider: heroku
+  api_key:
+    secure: $HEROKU_API_KEY
