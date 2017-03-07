@@ -42,7 +42,7 @@ setup(
         'gunicorn ~= 19.6.0',
         'neo4j-driver ~= 1.1.2'
     ],
-    tests_require=['nose2'],
+    tests_require=['nose2 ~= 0.6.5'],
     test_suite='nose2.collector.collector',
     # Install these with "pip install -e isoprene_pumpjack[dev]
     extras_require={
