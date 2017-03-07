@@ -15,3 +15,6 @@ deploy:
   provider: heroku
   api_key:
     secure: $HEROKU_API_KEY
+  app:
+    develop: isoprene-pumpjack-staging
+    master: isoprene-pumpjack
