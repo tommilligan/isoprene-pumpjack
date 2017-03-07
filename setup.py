@@ -35,7 +35,6 @@ setup(
     ],
     zip_safe=False,
     platforms='any',
-    test_suite='nose2.collector.collector',
     install_requires=[
         'Flask ~= 0.12',
         'Flask-RESTful ~= 0.3.5',
