@@ -24,7 +24,8 @@ def neo_link_to_d3_link(link):
     return d3link
 
 def neo_to_d3(result, nodeLabels, linkLabels):
-    '''Convert a set of neo results to a d3 drawable nodes/links object
+    '''
+    Convert neo results to d3 drawable nodes/links object
     
     Takes
     * the neo result (BoltStatementResult)
