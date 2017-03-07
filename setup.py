@@ -44,13 +44,16 @@ setup(
         'neo4j-driver ~= 1.1.2'
     ],
     tests_require=['nose2'],
+    test_suite='nose2.collector.collector',
     # Install these with "pip install -e isoprene_pumpjack[dev]
     extras_require={
-        'docs': [
-            'sphinx',
-            'sphinx-argparse',
-            'sphinx-rtdtheme',
-            'sphinxcontrib-httpdomain'
+        'dev': [
+            'sphinx ~= 1.5.3',
+            'sphinx-argparse ~= 0.1.17',
+            'sphinx-rtdtheme ~= 0.1.9',
+            'sphinxcontrib-httpdomain ~= 1.5.0',
+            'codeclimate-test-reporter ~= 0.2.1',
+            'cov-core ~= 1.15.0'
         ]
     },
     entry_points={
