@@ -3,9 +3,24 @@
 Provide a JSON serialized set of search results.
 '''
 
+from flask import request
 from flask_restful import Resource
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search, Q, Index, DocType, Text, Nested, InnerObjectWrapper
 
 import isoprene_pumpjack.utils as utils
+
+
+i = Index('dolphins')
+
+@i.doc_type
+class Dolphin(DocType):
+    id = Text()
+    label = Text()
+
+@i.doc_type
+class DolphinSighting(DocType):
+    dolphins = Text()
 
 
 class SearchDolphins(Resource):
@@ -13,9 +28,16 @@ class SearchDolphins(Resource):
     def __init__(self):
         self.logger = utils.object_logger(self)
 
-    def get(self, central_node_id):
-        '''Get JSON representing subgraph centered on a single node'''
+    def get(self):
+        '''Get documents containinga single dolphin by id and label'''
         self.logger.debug('Searching')
-        query = request.args.get('q', '')
-        return {}, 200
+        query_id = request.args.get('id', '')
+        query_label = request.args.get('label', '')
 
+        q = Q('match', dolphins=query_label)
+        s = Search().query(q).index('dolphins').doc_type(DolphinSighting)
+        print(s.to_dict())
+        response = s.execute()
+        print(response.to_dict())
+
+        return {}, 200

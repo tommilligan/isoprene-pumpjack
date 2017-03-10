@@ -8,9 +8,13 @@ JSON responses are given in the format:
 
 from flask_restful import Resource
 
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search, Q, Index
+
 from isoprene_pumpjack.constants.environment import bolt_driver
 import isoprene_pumpjack.utils as utils
 from isoprene_pumpjack.utils.dolphins import dolphins
+from isoprene_pumpjack.resources.search import Dolphin, DolphinSighting
 
 
 def reset_graph():
@@ -52,4 +56,57 @@ class NeoReset(Resource):
         self.logger.debug('Resetting neo4j')
         reset_graph()
         return {}, 200
+
+
+def reset_elastic():
+    '''Drop all elastic indexes'''
+    i = Index('_all')
+    response = i.delete()
+    return response
+
+def create_dolphins_index():
+    i = Index('dolphins')
+
+    # create the index, including DocType mappings
+    i.create()
+
+    for link in dolphins["links"]:
+        # instantiate the document
+        pairing_report = DolphinSighting()
+        # assign some field values, can be values or lists of values
+        pairing_report.dolphins = [
+            list((x['label'] for x in dolphins['nodes']
+                        if x["id"] == link["source"]))[0],
+            list((x["label"] for x in dolphins['nodes']
+                        if x["id"] == link["target"]))[0]
+        ]
+
+        # save the document into the cluster
+        pairing_report.save()
+
+
+class ElasticReset(Resource):
+    '''Debug endpoint - reset elastic'''
+    def __init__(self):
+        self.logger = utils.object_logger(self)
+
+    def get(self):
+        '''Drop database'''
+        self.logger.debug('Resetting elastic')
+        response = reset_elastic()
+        return response, 200
+
+
+class IndexDolphins(Resource):
+    '''Debug endpoint - create an Elastic dolphins index'''
+    def __init__(self):
+        self.logger = utils.object_logger(self)
+
+    def get(self):
+        '''Create and load dolphins index'''
+        self.logger.debug('Indexing dolphins in elastic')
+        reset_elastic()
+        response = create_dolphins_index()
+        return response, 200
+
 

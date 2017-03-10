@@ -10,7 +10,7 @@ from flask_cors import CORS
 from isoprene_pumpjack.resources.discovery import Discovery
 from isoprene_pumpjack.resources.graphs import SubGraph, FullGraph
 from isoprene_pumpjack.resources.search import SearchDolphins
-from isoprene_pumpjack.resources.dev import ResetDolphins, NeoReset
+from isoprene_pumpjack.resources.dev import ResetDolphins, NeoReset, IndexDolphins, ElasticReset
 from isoprene_pumpjack.resources.synaptic_scout_config import SynapticScoutConfig
 
 
@@ -22,6 +22,8 @@ api = Api(app)
 # Dev only
 api.add_resource(ResetDolphins, '/dev/neo/set/dolphins')
 api.add_resource(NeoReset, '/dev/neo/reset')
+api.add_resource(IndexDolphins, '/dev/elastic/set/dolphins')
+api.add_resource(ElasticReset, '/dev/elastic/reset')
 
 
 # Add resources
