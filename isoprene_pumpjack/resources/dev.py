@@ -13,10 +13,13 @@ import isoprene_pumpjack.utils as utils
 from isoprene_pumpjack.utils.dolphins import dolphins
 
 
-def set_graph(data):
+def reset_graph():
     with bolt_driver.session() as session:
         session.run("MATCH (n) DETACH DELETE n")
 
+
+def set_graph(data):
+    with bolt_driver.session() as session:
         for node in data["nodes"]:
             session.run("CREATE (a:Dolphin {id: {id}, label: {label}})",
                         node)
@@ -28,13 +31,25 @@ def set_graph(data):
 
 
 class ResetDolphins(Resource):
-    '''Debug endpoint - reset neo4j'''
+    '''Debug endpoint - set neo4j as dolphins graph'''
     def __init__(self):
         self.logger = utils.object_logger(self)
 
     def get(self):
         '''Drop database and upload dolphins JSON data into Neo4j'''
         self.logger.debug('Resetting neo4j to dolphins')
+        reset_graph()
         set_graph(dolphins)
+        return {}, 200
+
+class NeoReset(Resource):
+    '''Debug endpoint - reset neo4j'''
+    def __init__(self):
+        self.logger = utils.object_logger(self)
+
+    def get(self):
+        '''Drop database'''
+        self.logger.debug('Resetting neo4j')
+        reset_graph()
         return {}, 200
 
