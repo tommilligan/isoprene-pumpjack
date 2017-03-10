@@ -40,7 +40,8 @@ setup(
         'Flask-RESTful ~= 0.3.5',
         'Flask-cors ~= 3.0.2',
         'gunicorn ~= 19.6.0',
-        'neo4j-driver ~= 1.1.2'
+        'neo4j-driver ~= 1.1.2',
+        'elasticsearch-dsl ~= 5.1.0'
     ],
     tests_require=['nose2 ~= 0.6.5'],
     test_suite='nose2.collector.collector',
