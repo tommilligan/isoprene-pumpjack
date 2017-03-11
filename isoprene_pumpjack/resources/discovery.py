@@ -28,4 +28,4 @@ class Discovery(Resource):
     def get(self):
         '''Get JSON representing endpoints'''
         self.logger.debug('Getting discovery')
-        return discovery
+        return discovery, 200

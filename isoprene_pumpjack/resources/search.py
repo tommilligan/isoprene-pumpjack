@@ -42,3 +42,5 @@ class SearchDolphins(Resource):
         results = response.hits.hits
 
         return results, 200
+
+

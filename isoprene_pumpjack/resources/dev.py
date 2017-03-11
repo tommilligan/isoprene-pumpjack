@@ -44,7 +44,7 @@ class ResetDolphins(Resource):
         self.logger.debug('Resetting neo4j to dolphins')
         reset_graph()
         set_graph(dolphins)
-        return {}, 200
+        return {}, 201
 
 class NeoReset(Resource):
     '''Debug endpoint - reset neo4j'''
@@ -55,7 +55,7 @@ class NeoReset(Resource):
         '''Drop database'''
         self.logger.debug('Resetting neo4j')
         reset_graph()
-        return {}, 200
+        return {}, 204
 
 
 def reset_elastic():
@@ -94,7 +94,7 @@ class ElasticReset(Resource):
         '''Drop database'''
         self.logger.debug('Resetting elastic')
         response = reset_elastic()
-        return response, 200
+        return {}, 204
 
 
 class IndexDolphins(Resource):
@@ -107,6 +107,6 @@ class IndexDolphins(Resource):
         self.logger.debug('Indexing dolphins in elastic')
         reset_elastic()
         response = create_dolphins_index()
-        return response, 200
+        return {}, 201
 
 

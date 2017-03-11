@@ -37,5 +37,5 @@ class SynapticScoutConfig(Resource):
     def get(self):
         '''Get JSON config for synaptic-scout'''
         self.logger.debug('Getting config')
-        return config
+        return config, 200
 
