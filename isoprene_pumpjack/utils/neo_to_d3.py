@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-def dedupe_dict_list(duped, id_prop):
+def dedupe_dict_list(duped, id_prop="id"):
     '''Dedupe a list of dicts by a dictionary property'''
     deduped = list({v[id_prop]:v for v in duped}.values())
     return deduped
@@ -23,7 +23,7 @@ def neo_link_to_d3_link(link):
     }
     return d3link
 
-def neo_to_d3(result, nodeLabels, linkLabels):
+def neo_to_d3(result, nodeLabels=[], linkLabels=[]):
     '''
     Convert neo results to d3 drawable nodes/links object
     
@@ -83,8 +83,7 @@ def neo_to_d3(result, nodeLabels, linkLabels):
                     d3object = process["function"](neo_object)
                     d3data[process["d3key"]].append(d3object)
     
-    d3data["nodes"] = dedupe_dict_list(d3data["nodes"], "id")
-    d3data["links"] = dedupe_dict_list(d3data["links"], "id")
+            d3data[process["d3key"]] = dedupe_dict_list(d3data[process["d3key"]], "id")
 
     return d3data
 
