@@ -72,9 +72,9 @@ def create_dolphins_index():
 
     for link in dolphins["links"]:
         # instantiate the document
-        pairing_report = DolphinSighting()
+        sighting_doc = DolphinSighting()
         # assign some field values, can be values or lists of values
-        pairing_report.dolphins = [
+        sighting_doc.dolphins = [
             list((x['label'] for x in dolphins['nodes']
                         if x["id"] == link["source"]))[0],
             list((x["label"] for x in dolphins['nodes']
@@ -82,7 +82,7 @@ def create_dolphins_index():
         ]
 
         # save the document into the cluster
-        pairing_report.save()
+        sighting_doc.save()
 
 
 class ElasticReset(Resource):

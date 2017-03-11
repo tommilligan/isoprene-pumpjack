@@ -36,8 +36,9 @@ class SearchDolphins(Resource):
 
         q = Q('match', dolphins=query_label)
         s = Search().query(q).index('dolphins').doc_type(DolphinSighting)
-        print(s.to_dict())
+        self.logger.debug('Executing elastic search {0}'.format(s.to_dict()))
         response = s.execute()
-        print(response.to_dict())
+        self.logger.debug('Search found {0} results'.format(response.hits.total))
+        results = response.hits.hits
 
-        return {}, 200
+        return results, 200
