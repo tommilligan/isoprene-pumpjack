@@ -4,9 +4,7 @@ Provide the JSON object to configure synaptic-scout with the
 isoprene_pumpjack backend
 '''
 
-from flask_restful import Resource
-
-from isoprene_pumpjack.utils import object_logger
+from isoprene_pumpjack.utils import SmartResource
 
 
 config = {
@@ -29,10 +27,8 @@ config = {
 }
 
 
-class SynapticScoutConfig(Resource):
+class SynapticScoutConfig(SmartResource):
     '''API endpoint to provide config JSON for synaptic-scout'''
-    def __init__(self):
-        self.logger = object_logger(self)
 
     def get(self):
         '''Get JSON config for synaptic-scout'''

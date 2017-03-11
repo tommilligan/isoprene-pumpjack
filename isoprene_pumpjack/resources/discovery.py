@@ -3,9 +3,7 @@
 Provide a JSON serialized list of endpoints
 '''
 
-from flask_restful import Resource
-
-from isoprene_pumpjack.utils import object_logger
+from isoprene_pumpjack.utils import SmartResource
 
 discovery = {
   "kind": "discovery#restDescription",
@@ -20,10 +18,8 @@ discovery = {
 }
 
 
-class Discovery(Resource):
+class Discovery(SmartResource):
     '''API endpoint to provide config JSON for synaptic-scout'''
-    def __init__(self):
-        self.logger = object_logger(self)
 
     def get(self):
         '''Get JSON representing endpoints'''

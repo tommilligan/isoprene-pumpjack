@@ -6,13 +6,11 @@ of the full graph available in the backend.
 JSON responses are given in the format:
 '''
 
-from flask_restful import Resource
-
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q, Index
 
 from isoprene_pumpjack.constants.environment import bolt_driver
-import isoprene_pumpjack.utils as utils
+from isoprene_pumpjack.utils import SmartResource
 from isoprene_pumpjack.utils.dolphins import dolphins
 from isoprene_pumpjack.resources.search import Dolphin, DolphinSighting
 
@@ -34,10 +32,8 @@ def set_graph(data):
                         link)
 
 
-class ResetDolphins(Resource):
+class ResetDolphins(SmartResource):
     '''Debug endpoint - set neo4j as dolphins graph'''
-    def __init__(self):
-        self.logger = utils.object_logger(self)
 
     def get(self):
         '''Drop database and upload dolphins JSON data into Neo4j'''
@@ -46,10 +42,8 @@ class ResetDolphins(Resource):
         set_graph(dolphins)
         return {}, 201
 
-class NeoReset(Resource):
+class NeoReset(SmartResource):
     '''Debug endpoint - reset neo4j'''
-    def __init__(self):
-        self.logger = utils.object_logger(self)
 
     def get(self):
         '''Drop database'''
@@ -85,10 +79,8 @@ def create_dolphins_index():
         sighting_doc.save()
 
 
-class ElasticReset(Resource):
+class ElasticReset(SmartResource):
     '''Debug endpoint - reset elastic'''
-    def __init__(self):
-        self.logger = utils.object_logger(self)
 
     def get(self):
         '''Drop database'''
@@ -97,10 +89,8 @@ class ElasticReset(Resource):
         return {}, 204
 
 
-class IndexDolphins(Resource):
+class IndexDolphins(SmartResource):
     '''Debug endpoint - create an Elastic dolphins index'''
-    def __init__(self):
-        self.logger = utils.object_logger(self)
 
     def get(self):
         '''Create and load dolphins index'''

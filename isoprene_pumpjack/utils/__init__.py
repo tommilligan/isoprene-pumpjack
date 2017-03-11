@@ -3,6 +3,9 @@
 
 import logging
 
+from flask_restful import Resource
+
+
 def object_fullname(obj):
     '''Returns the full absolute name of the object provided'''
     fullname = obj.__module__ + "." + obj.__class__.__name__
@@ -13,4 +16,9 @@ def object_logger(obj):
     fullname = object_fullname(obj)
     logger = logging.getLogger(fullname)
     return logger
+
+class SmartResource(Resource):
+    '''Smart resource that initiates logging on creation'''
+    def __init__(self):
+        self.logger = object_logger(self)
 

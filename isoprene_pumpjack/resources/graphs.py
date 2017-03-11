@@ -6,10 +6,8 @@ of the full graph available in the backend.
 JSON responses are given in the format:
 '''
 
-from flask_restful import Resource
-
 from isoprene_pumpjack.constants.environment import bolt_driver
-import isoprene_pumpjack.utils as utils
+from isoprene_pumpjack.utils import SmartResource
 import isoprene_pumpjack.utils.neo_to_d3 as neo_to_d3
 
 
@@ -35,10 +33,8 @@ def get_sub_graph(central_node_id):
     return data
 
 
-class SubGraph(Resource):
+class SubGraph(SmartResource):
     '''API endpoint to provide config JSON for synaptic-scout'''
-    def __init__(self):
-        self.logger = utils.object_logger(self)
 
     def get(self, central_node_id):
         '''Get JSON representing subgraph centered on a single node'''
@@ -47,10 +43,8 @@ class SubGraph(Resource):
         return sub_graph, 200
 
 
-class FullGraph(Resource):
+class FullGraph(SmartResource):
     '''Provide all graph data from backend'''
-    def __init__(self):
-        self.logger = utils.object_logger(self)
 
     def get(self):
         '''Get JSON representing full graph'''

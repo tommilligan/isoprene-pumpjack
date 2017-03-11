@@ -4,7 +4,6 @@ Provide a JSON serialized set of search results.
 '''
 
 from flask import request
-from flask_restful import Resource
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q, Index, DocType, Text, Nested, InnerObjectWrapper
 
@@ -23,10 +22,8 @@ class DolphinSighting(DocType):
     dolphins = Text()
 
 
-class SearchDolphins(Resource):
+class SearchDolphins(utils.SmartResource):
     '''API endpoint to provide config JSON for synaptic-scout'''
-    def __init__(self):
-        self.logger = utils.object_logger(self)
 
     def get(self):
         '''Get documents containinga single dolphin by id and label'''
@@ -42,5 +39,4 @@ class SearchDolphins(Resource):
         results = response.hits.hits
 
         return results, 200
-
 
