@@ -97,5 +97,5 @@ class SeedGraph(SmartResource):
         hits = dolphin_label_hits(query_label)
         central_node_id = merge_hits_to_node(hits, query_label)
 
-        return central_node_id, 201
+        return {"id": central_node_id}, 201
 

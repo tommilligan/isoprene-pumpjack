@@ -21,13 +21,14 @@ def get_full_graph():
     return data
 
 def get_sub_graph(central_node_id):
-    '''Quick and dirty subgraph - throw away most nodes and corresponding links
-    '''
+    '''Get subgraph - first neighbours of the selected node'''
     with bolt_driver.session() as session:
-        result = session.run("""MATCH (s)-[r*1]-(t)
-                        WHERE s.id = {id}
-                        RETURN s, r, t""",
-                        {"id": central_node_id})
+        result = session.run("""MATCH (s:{node_label})-[r*0..1]-(t:{node_label})
+                        WHERE s.id = '{id}'
+                        RETURN s, r, t""".format(**{
+                            "id": central_node_id,
+                            "node_label": "Dolphin"
+                        }))
     
     data = neo_to_d3.neo_to_d3(result, ["s", "t"], ["r"])
     return data
