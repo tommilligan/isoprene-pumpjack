@@ -35,7 +35,7 @@ if os.getenv('BONSAI_URL'):
     logger.info('Using Bonsai hosted elasticsearch')
     # Parse the auth and host from env:
     bonsai = os.environ['BONSAI_URL']
-    auth = re.search('https?\:\/\/(.*)\@', bonsai).group(1).split(':')
+    auth = re.search('https\:\/\/(.*)\@', bonsai).group(1).split(':')
     host = bonsai.replace('https://%s:%s@' % (auth[0], auth[1]), '')
 
     # Connect to cluster over SSL using auth for best security:
