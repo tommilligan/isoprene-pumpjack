@@ -41,7 +41,7 @@ def merge_hits_to_node(hits, label):
     '''Collate document records to nodes and links, and upload to neo'''
     logger.debug('Merging {0} elastic documents to neo node'.format(len(hits)))
 
-    document_ids = json.dumps([hit["_id"] for hit in hits])
+    # Create central node, the main focus of the search query
     with bolt_driver.session() as session:
         result = session.run("""MERGE (d:{neo_label} {{ label: '{data_label}', id: '{data_label}' }})
                         ON CREATE SET d.isopump_load_initial = timestamp()
@@ -50,13 +50,14 @@ def merge_hits_to_node(hits, label):
                         """.format(**{
                             "neo_label": "Dolphin",
                             "data_label": label,
-                            "document_ids": document_ids
                         }))
         created = neo_to_d3(result, ["d"])
         created_id = created["nodes"][0]["props"]["id"]
         logger.debug('New dolphin node created with id {0}'.format(created_id))
 
+        # For each document returned by the query, store extraneous data
         for document in hits:
+            document_id = document["_id"]
             session.run("""MATCH (c:{central_label} {{ id: '{central_id}' }})
                         MERGE (d:{neo_label} {{ id: '{doc_id}' }})
                         ON CREATE SET d.isopump_load_initial = timestamp()
@@ -67,9 +68,33 @@ def merge_hits_to_node(hits, label):
                             "doc_label": "Source",
                             "central_label": "Dolphin",
                             "neo_label": "Document",
-                            "doc_id": document["_id"]
+                            "doc_id": document_id
                         }))
             logger.debug('New document node created')
+
+            dolphins = document["_source"]["dolphins"]
+            dolphins_peripheral = [dolphin for dolphin in dolphins
+                        if dolphin != label]
+            
+            for peripheral_dolphin in dolphins_peripheral:
+                session.run("""MERGE (c:{central_label} {{ id: '{central_id}' }})
+                            MERGE (s:{doc_label} {{ id: '{doc_id}' }})
+                            MERGE (d:{neo_label} {{ id: '{peripheral_id}', label: '{peripheral_id}' }})
+                            ON CREATE SET d.isopump_load_initial = timestamp()
+                            ON MATCH SET d.isopump_load_last = timestamp()
+                            MERGE (c)-[:{knows_label}]-(d)
+                            MERGE (d)-[:{source_label}]->(s)
+                            """.format(**{
+                                "central_id": created_id,
+                                "knows_label": "Knows",
+                                "central_label": "Dolphin",
+                                "neo_label": "Dolphin",
+                                "doc_id": document_id,
+                                "doc_label": "Document",
+                                "source_label": "Source",
+                                "peripheral_id": peripheral_dolphin
+                            }))
+                logger.debug('New document node created')
 
     return created_id
 
