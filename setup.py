@@ -53,7 +53,8 @@ setup(
             'sphinx-rtdtheme ~= 0.1.9',
             'sphinxcontrib-httpdomain ~= 1.5.0',
             'codeclimate-test-reporter ~= 0.2.1',
-            'cov-core ~= 1.15.0'
+            'cov-core ~= 1.15.0',
+            'nose2 ~= 0.6.5'
         ]
     },
     entry_points={
