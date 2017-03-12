@@ -6,7 +6,9 @@ of the full graph available in the backend.
 JSON responses are given in the format:
 '''
 
-from elasticsearch import Elasticsearch
+import logging
+
+from elasticsearch import Elasticsearch, TransportError
 from elasticsearch_dsl import Search, Q, Index
 
 from isoprene_pumpjack.constants.environment import bolt_driver
@@ -14,6 +16,7 @@ from isoprene_pumpjack.utils import SmartResource
 from isoprene_pumpjack.utils.dolphins import dolphins
 from isoprene_pumpjack.resources.search import Dolphin, DolphinSighting
 
+logger = logging.getLogger(__name__)
 
 def reset_graph():
     with bolt_driver.session() as session:
@@ -53,10 +56,17 @@ class NeoReset(SmartResource):
 
 
 def reset_elastic():
-    '''Drop all elastic indexes'''
-    i = Index('_all')
-    response = i.delete()
-    return response
+    '''Drop dolphins elastic index'''
+    i = Index('dolphins')
+    try:
+        i.delete()
+        logger.debug('Dolphins index was dropped')
+    except TransportError as e:
+        if e.status_code == 404:
+            logger.info('Dolphins index was not dropped as it was not found')
+        else:
+            raise
+    
 
 def create_dolphins_index():
     i = Index('dolphins')
@@ -85,7 +95,7 @@ class ElasticReset(SmartResource):
     def get(self):
         '''Drop database'''
         self.logger.debug('Resetting elastic')
-        response = reset_elastic()
+        reset_elastic()
         return {}, 204
 
 
