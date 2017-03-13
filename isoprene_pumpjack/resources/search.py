@@ -37,66 +37,35 @@ def dolphin_label_hits(label):
     logger.debug('Search found {0} results'.format(response.hits.total))
     return response.hits.hits
 
-def merge_hits_to_node(hits, label):
+def merge_hits_to_node(hits):
     '''Collate document records to nodes and links, and upload to neo'''
     logger.debug('Merging {0} elastic documents to neo node'.format(len(hits)))
 
     # Create central node, the main focus of the search query
     with bolt_driver.session() as session:
-        result = session.run("""MERGE (d:{neo_label} {{ label: '{data_label}', id: '{data_label}' }})
-                        ON CREATE SET d.isopump_load_initial = timestamp()
-                        ON MATCH SET d.isopump_load_last = timestamp()
-                        RETURN d
-                        """.format(**{
-                            "neo_label": "Dolphin",
-                            "data_label": label,
-                        }))
-        created = neo_to_d3(result, ["d"])
-        created_id = created["nodes"][0]["props"]["id"]
-        logger.debug('New dolphin node created with id {0}'.format(created_id))
-
         # For each document returned by the query, store extraneous data
         for document in hits:
             document_id = document["_id"]
-            session.run("""MATCH (c:{central_label} {{ id: '{central_id}' }})
-                        MERGE (d:{neo_label} {{ id: '{doc_id}' }})
-                        ON CREATE SET d.isopump_load_initial = timestamp()
-                        ON MATCH SET d.isopump_load_last = timestamp()
-                        MERGE (c)-[:{doc_label}]->(d)
-                        """.format(**{
-                            "central_id": created_id,
-                            "doc_label": "Source",
-                            "central_label": "Dolphin",
-                            "neo_label": "Document",
-                            "doc_id": document_id
-                        }))
-            logger.debug('New document node created')
-
             dolphins = document["_source"]["dolphins"]
-            dolphins_peripheral = [dolphin for dolphin in dolphins
-                        if dolphin != label]
             
-            for peripheral_dolphin in dolphins_peripheral:
-                session.run("""MERGE (c:{central_label} {{ id: '{central_id}' }})
-                            MERGE (s:{doc_label} {{ id: '{doc_id}' }})
+            for dolphin in dolphins:
+                session.run("""MERGE (s:{doc_label} {{ id: '{doc_id}', label: '{doc_id}' }})
+                            ON CREATE SET s.isopump_load_initial = timestamp()
+                            ON MATCH SET s.isopump_load_last = timestamp()
                             MERGE (d:{neo_label} {{ id: '{peripheral_id}', label: '{peripheral_id}' }})
                             ON CREATE SET d.isopump_load_initial = timestamp()
                             ON MATCH SET d.isopump_load_last = timestamp()
-                            MERGE (c)-[:{knows_label}]-(d)
                             MERGE (d)-[:{source_label}]->(s)
                             """.format(**{
-                                "central_id": created_id,
                                 "knows_label": "Knows",
-                                "central_label": "Dolphin",
                                 "neo_label": "Dolphin",
                                 "doc_id": document_id,
                                 "doc_label": "Document",
                                 "source_label": "Source",
-                                "peripheral_id": peripheral_dolphin
+                                "peripheral_id": dolphin
                             }))
-                logger.debug('New document node created')
+                logger.debug('New dolphin and document nodes created')
 
-    return created_id
 
 class SearchDolphins(SmartResource):
     '''API endpoint to provide config JSON for synaptic-scout'''
@@ -120,7 +89,7 @@ class SeedGraph(SmartResource):
         query_label = request.args.get('label', '')
 
         hits = dolphin_label_hits(query_label)
-        central_node_id = merge_hits_to_node(hits, query_label)
+        merge_hits_to_node(hits)
 
-        return {"id": central_node_id}, 201
+        return {"id": query_label}, 201
 
