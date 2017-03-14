@@ -7,7 +7,7 @@
 
 Install using pip
 ```
-pip install isoprene_pumpjack
+pip install isoprene-pumpjack
 ```
 
 Run using

@@ -24,7 +24,7 @@ setup(
     license='Apache License 2.0',
     url='https://github.com/tommilligan/isoprene-pumpjack/',
     author='Tom Milligan',
-    author_email='tom@tommilligan.net',
+    author_email='code@tommilligan.net',
     description="Backend for synaptic-scout; request data from Neo4j, perform searches in Elastic, and pump data between the two.",
     keywords='neo neo4j elastic elasticsearch graph iterative',
     packages=find_packages(exclude=['tests']),
