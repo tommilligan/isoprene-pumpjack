@@ -4,7 +4,7 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - coverage run --source=lib -m nose2.__main__ -v
+  - nose2 --with-coverage
 after_sucess:
   - coveralls
   - CODECLIMATE_REPO_TOKEN=$CODECLIMATE_REPO_TOKEN codeclimate-test-reporter
