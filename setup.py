@@ -55,7 +55,8 @@ setup(
             'sphinxcontrib-httpdomain ~= 1.5.0',
             'codeclimate-test-reporter ~= 0.2.1',
             'cov-core ~= 1.15.0',
-            'nose2 ~= 0.6.5'
+            'nose2 ~= 0.6.5',
+            'coveralls ~= 1.1''
         ]
     },
     entry_points={

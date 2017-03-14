@@ -16,11 +16,13 @@ deploy:
       develop: isoprene-pumpjack-staging
       master: isoprene-pumpjack
   - provider: pypi
+    skip_upload_docs: true
     distributions: sdist
-    user: "tommilligan"
-    password: "$PYPI_PASSWORD"
+    user: tommilligan
+    password: $PYPI_PASSWORD
     on:
-      all_branches: true
+      branch: master
+      tags: true
       condition: $TRAVIS_PYTHON_VERSION = "2.7"
 addons:
   srcclr: true
