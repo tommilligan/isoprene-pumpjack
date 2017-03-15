@@ -21,7 +21,11 @@ deploy:
     user: tommilligan
     password: $PYPI_PASSWORD
     on:
-      all_branches: true
+      branch: master
+      tags: true 
       condition: $TRAVIS_PYTHON_VERSION = "2.7"
 addons:
   srcclr: true
+notifications:
+  email: false
+
