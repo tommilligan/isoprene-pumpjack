@@ -30,6 +30,7 @@ class DolphinSighting(DocType):
 
 def dolphin_label_hits(label):
     '''Search for all records of a dolphin by label'''
+    logger.debug("Searching index for {0}".format(label))
     q = Q('match', dolphins=label)
     s = Search().query(q).index('dolphins').doc_type(DolphinSighting)
     logger.debug('Executing elastic search {0}'.format(s.to_dict()))
@@ -50,22 +51,38 @@ def merge_hits_to_node(hits):
             
             for dolphin in dolphins:
                 session.run("""MERGE (s:{doc_label} {{ id: '{doc_id}', label: '{doc_id}' }})
-                            ON CREATE SET s.isopump_load_initial = timestamp()
+                            ON CREATE SET s.isopump_load_initial = timestamp(), s.isopump_fully_loaded = TRUE
                             ON MATCH SET s.isopump_load_last = timestamp()
                             MERGE (d:{neo_label} {{ id: '{peripheral_id}', label: '{peripheral_id}' }})
                             ON CREATE SET d.isopump_load_initial = timestamp()
                             ON MATCH SET d.isopump_load_last = timestamp()
                             MERGE (d)-[:{source_label}]->(s)
                             """.format(**{
-                                "knows_label": "Knows",
                                 "neo_label": "Dolphin",
                                 "doc_id": document_id,
                                 "doc_label": "Document",
                                 "source_label": "Source",
                                 "peripheral_id": dolphin
                             }))
-                logger.debug('New dolphin and document nodes created')
+        logger.debug('New dolphin and document nodes created')
 
+def mark_fully_loaded(label):
+    # Mark central node as fully loaded
+    logger.debug('Marking {0} as fully loaded'.format(label))
+    with bolt_driver.session() as session:
+        session.run("""MERGE (s:{neo_label} {{ id: '{doc_id}'}})
+                    SET s.isopump_fully_loaded = TRUE
+                    """.format(**{
+                        "neo_label": "Dolphin",
+                        "doc_id": label
+                    }))
+
+
+def seed_neo_graph(query_label):
+    logger.debug("Seeding neo graph with elasticsearch {0}".format(query_label))
+    hits = dolphin_label_hits(query_label)
+    merge_hits_to_node(hits)
+    mark_fully_loaded(query_label)
 
 class SearchDolphins(SmartResource):
     '''API endpoint to provide config JSON for synaptic-scout'''
@@ -76,7 +93,7 @@ class SearchDolphins(SmartResource):
         query_id = request.args.get('id', '')
         query_label = request.args.get('label', '')
 
-        results = dolphin_label_hits(query_label)
+        results = dolphin_label_hits(query_label)            
         return results, 200
 
 
@@ -87,9 +104,6 @@ class SeedGraph(SmartResource):
         '''Get documents containing a single dolphin by id and label'''
         self.logger.debug('Seeding graph')
         query_label = request.args.get('label', '')
-
-        hits = dolphin_label_hits(query_label)
-        merge_hits_to_node(hits)
-
+        seed_neo_graph(query_label)
         return {"id": query_label}, 201
 

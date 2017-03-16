@@ -10,6 +10,7 @@ from flask_cors import CORS
 from isoprene_pumpjack.resources.discovery import Discovery
 from isoprene_pumpjack.resources.graphs import SubGraph, FullGraph
 from isoprene_pumpjack.resources.search import SearchDolphins, SeedGraph
+from isoprene_pumpjack.resources.explore import SmartSubGraph
 from isoprene_pumpjack.resources.dev import ResetDolphins, NeoReset, IndexDolphins, ElasticReset
 from isoprene_pumpjack.resources.synaptic_scout_config import SynapticScoutConfig
 
@@ -20,8 +21,13 @@ cors = CORS(app)
 api = Api(app)
 
 # Dev only
+## Neo
 api.add_resource(ResetDolphins, '/dev/neo/set/dolphins')
 api.add_resource(NeoReset, '/dev/neo/reset')
+api.add_resource(SubGraph, '/dev/neo/subgraph/<string:central_node_id>')
+api.add_resource(FullGraph, '/dev/neo/fullgraph')
+
+## Elastic
 api.add_resource(IndexDolphins, '/dev/elastic/set/dolphins')
 api.add_resource(ElasticReset, '/dev/elastic/reset')
 
@@ -29,9 +35,8 @@ api.add_resource(ElasticReset, '/dev/elastic/reset')
 # Add resources
 api.add_resource(Discovery, '/')
 api.add_resource(SynapticScoutConfig, '/configuration/synaptic-scout')
-api.add_resource(FullGraph, '/fullgraph')
 # Subgraph centered on node_id
-api.add_resource(SubGraph, '/subgraph/<string:central_node_id>')
+api.add_resource(SmartSubGraph, '/explore/subgraph/<string:central_node_id>')
 
 
 api.add_resource(SearchDolphins, '/search')
