@@ -30,6 +30,8 @@ api.add_resource(FullGraph, '/dev/neo/fullgraph')
 ## Elastic
 api.add_resource(IndexDolphins, '/dev/elastic/set/dolphins')
 api.add_resource(ElasticReset, '/dev/elastic/reset')
+api.add_resource(SearchDolphins, '/dev/elastic/search')
+api.add_resource(SeedGraph, '/dev/elastic/seed')
 
 
 # Add resources
@@ -39,8 +41,6 @@ api.add_resource(SynapticScoutConfig, '/configuration/synaptic-scout')
 api.add_resource(SmartSubGraph, '/explore/subgraph/<string:central_node_id>')
 
 
-api.add_resource(SearchDolphins, '/search')
-api.add_resource(SeedGraph, '/seed')
 
 
 def main():
