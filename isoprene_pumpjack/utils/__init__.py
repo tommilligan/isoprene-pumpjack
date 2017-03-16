@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-'''Utility functions for isoprene_pumpjack'''
+'''
+Utility functions for isoprene_pumpjack
+
+Utilities have no dependencies, and should not interdepend.
+'''
 
 import logging
 

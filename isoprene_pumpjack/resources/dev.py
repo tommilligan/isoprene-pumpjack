@@ -11,7 +11,7 @@ import logging
 from elasticsearch import Elasticsearch, TransportError
 from elasticsearch_dsl import Search, Q, Index
 
-from isoprene_pumpjack.constants.environment import bolt_driver
+from isoprene_pumpjack.helpers.services import execute_cypher
 from isoprene_pumpjack.utils import SmartResource
 from isoprene_pumpjack.utils.dolphins import dolphins
 from isoprene_pumpjack.resources.search import Dolphin, DolphinSighting
@@ -19,20 +19,22 @@ from isoprene_pumpjack.resources.search import Dolphin, DolphinSighting
 logger = logging.getLogger(__name__)
 
 def reset_graph():
-    with bolt_driver.session() as session:
-        session.run("MATCH (n) DETACH DELETE n")
+    execute_cypher("MATCH (n) DETACH DELETE n")
 
 
 def set_graph(data):
-    with bolt_driver.session() as session:
-        for node in data["nodes"]:
-            session.run("CREATE (a:Dolphin {id: {id}, label: {label}})",
-                        node)
+    for node in data["nodes"]:
+        execute_cypher(
+            """CREATE (a:Dolphin {{ id: '{id}', label: '{label}' }})""".format(
+                **node
+            ))
 
-        for link in data["links"]:
-            session.run("""MATCH (s:Dolphin {id: {source}}), (t:Dolphin {id: {target}})
-                        CREATE (s)-[:knows]->(t)""",
-                        link)
+    for link in data["links"]:
+        execute_cypher(
+            """MATCH (s:Dolphin {{ id: '{source}' }}), (t:Dolphin {{ id: '{target}' }})
+            CREATE (s)-[:knows]->(t)""".format(
+                **link
+        ))
 
 
 class ResetDolphins(SmartResource):

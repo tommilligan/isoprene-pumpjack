@@ -11,8 +11,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q, Index, DocType, Text, Nested, InnerObjectWrapper
 
 from isoprene_pumpjack.utils import SmartResource
-from isoprene_pumpjack.utils.neo_to_d3 import neo_to_d3
-from isoprene_pumpjack.constants.environment import bolt_driver
+from isoprene_pumpjack.helpers.services import execute_cypher
 
 logger = logging.getLogger(__name__)
 
@@ -42,40 +41,39 @@ def merge_hits_to_node(hits):
     '''Collate document records to nodes and links, and upload to neo'''
     logger.debug('Merging {0} elastic documents to neo node'.format(len(hits)))
 
-    # Create central node, the main focus of the search query
-    with bolt_driver.session() as session:
-        # For each document returned by the query, store extraneous data
-        for document in hits:
-            document_id = document["_id"]
-            dolphins = document["_source"]["dolphins"]
-            
-            for dolphin in dolphins:
-                session.run("""MERGE (s:{doc_label} {{ id: '{doc_id}', label: '{doc_id}' }})
-                            ON CREATE SET s.isopump_load_initial = timestamp(), s.isopump_fully_loaded = TRUE
-                            ON MATCH SET s.isopump_load_last = timestamp()
-                            MERGE (d:{neo_label} {{ id: '{peripheral_id}', label: '{peripheral_id}' }})
-                            ON CREATE SET d.isopump_load_initial = timestamp()
-                            ON MATCH SET d.isopump_load_last = timestamp()
-                            MERGE (d)-[:{source_label}]->(s)
-                            """.format(**{
-                                "neo_label": "Dolphin",
-                                "doc_id": document_id,
-                                "doc_label": "Document",
-                                "source_label": "Source",
-                                "peripheral_id": dolphin
-                            }))
-        logger.debug('New dolphin and document nodes created')
+    # For each document returned by the query, store extraneous data
+    for document in hits:
+        document_id = document["_id"]
+        dolphins = document["_source"]["dolphins"]
+        
+        for dolphin in dolphins:
+            cypher = """MERGE (s:{doc_label} {{ id: '{doc_id}', label: '{doc_id}' }})
+                        ON CREATE SET s.isopump_load_initial = timestamp(), s.isopump_fully_loaded = TRUE
+                        ON MATCH SET s.isopump_load_last = timestamp()
+                        MERGE (d:{neo_label} {{ id: '{peripheral_id}', label: '{peripheral_id}' }})
+                        ON CREATE SET d.isopump_load_initial = timestamp()
+                        ON MATCH SET d.isopump_load_last = timestamp()
+                        MERGE (d)-[:{source_label}]->(s)
+                        """.format(**{
+                            "neo_label": "Dolphin",
+                            "doc_id": document_id,
+                            "doc_label": "Document",
+                            "source_label": "Source",
+                            "peripheral_id": dolphin
+                        })
+            execute_cypher(cypher)       
+    logger.debug('New dolphin and document nodes created')
 
 def mark_fully_loaded(label):
     # Mark central node as fully loaded
     logger.debug('Marking {0} as fully loaded'.format(label))
-    with bolt_driver.session() as session:
-        session.run("""MERGE (s:{neo_label} {{ id: '{doc_id}'}})
+    cypher = """MERGE (s:{neo_label} {{ id: '{doc_id}'}})
                     SET s.isopump_fully_loaded = TRUE
                     """.format(**{
                         "neo_label": "Dolphin",
                         "doc_id": label
-                    }))
+                    })
+    execute_cypher(cypher)
 
 
 def seed_neo_graph(query_label):

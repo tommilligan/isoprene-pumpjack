@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+'''
+Transformation of Neo4J result object into a d3 friendly dictionary.
+'''
+
 
 def dedupe_dict_list(duped, id_prop="id"):
     '''Dedupe a list of dicts by a dictionary property'''
