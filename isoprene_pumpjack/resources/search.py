@@ -11,7 +11,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Q, Index, DocType, Text, Nested, InnerObjectWrapper
 
 from isoprene_pumpjack.utils import SmartResource
-from isoprene_pumpjack.helpers.services import execute_cypher
+from isoprene_pumpjack.helpers.services import execute_cypher, execute_search
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ def dolphin_label_hits(label):
     q = Q('match', dolphins=label)
     s = Search().query(q).index('dolphins').doc_type(DolphinSighting)
     logger.debug('Executing elastic search {0}'.format(s.to_dict()))
-    response = s.execute()
+    response = execute_search(s)
     logger.debug('Search found {0} results'.format(response.hits.total))
     return response.hits.hits
 
