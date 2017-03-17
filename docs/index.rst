@@ -9,30 +9,10 @@ isoprene-pumpjack
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   installation
+   api
 
-Installation
-------------
-
-Install with pip::
-
-    pip install isoprene-pumpjack
-
-Use
----
-
-To run with Gunicorn prod server::
-
-    gunicorn isoprene_pumpjack.wsgi:app
-
-To run with Flask dev server::
-
-    isoprene-pumpjack
-
-API
----
-
-.. autoflask:: isoprene_pumpjack:app
-   :undoc-static:
 
 Indices and tables
 ------------------
