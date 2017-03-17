@@ -7,7 +7,7 @@ import logging
 
 from neo4j.v1 import GraphDatabase, basic_auth
 
-import isoprene_pumpjack.constants.environment as isopump_env
+from isoprene_pumpjack.constants.environment import environment
 from isoprene_pumpjack.utils.neo_to_d3 import neo_to_d3
 from isoprene_pumpjack.exceptions import GraphServiceException, DocumentServiceException
 
@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 
 logger.info('Seting up Bolt driver')
 bolt_driver = GraphDatabase.driver(
-    isopump_env.ISOPRENE_PUMPJACK_BOLT_URL,
+    environment["ISOPRENE_PUMPJACK_BOLT_URL"],
     auth=basic_auth(
-        isopump_env.ISOPRENE_PUMPJACK_BOLT_USER,
-        isopump_env.ISOPRENE_PUMPJACK_BOLT_PASSWORD
+        environment["ISOPRENE_PUMPJACK_BOLT_USER"],
+        environment["ISOPRENE_PUMPJACK_BOLT_PASSWORD"]
     )
 )
 
