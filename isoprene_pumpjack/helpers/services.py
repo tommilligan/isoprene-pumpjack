@@ -13,18 +13,16 @@ from isoprene_pumpjack.exceptions import GraphServiceException, DocumentServiceE
 
 logger = logging.getLogger(__name__)
 
-logger.info('Seting up Bolt driver')
-bolt_driver = GraphDatabase.driver(
-    environment["ISOPRENE_PUMPJACK_BOLT_URL"],
-    auth=basic_auth(
-        environment["ISOPRENE_PUMPJACK_BOLT_USER"],
-        environment["ISOPRENE_PUMPJACK_BOLT_PASSWORD"]
-    )
-)
-
 # TODO - some error handling here?
 def execute_cypher(cypher_statement):
     logger.debug("Executing cypher statement")
+    bolt_driver = GraphDatabase.driver(
+        environment["ISOPRENE_PUMPJACK_BOLT_URL"],
+        auth=basic_auth(
+            environment["ISOPRENE_PUMPJACK_BOLT_USER"],
+            environment["ISOPRENE_PUMPJACK_BOLT_PASSWORD"]
+        )
+    )
     with bolt_driver.session() as session:
         result = session.run(cypher_statement)
     return result
