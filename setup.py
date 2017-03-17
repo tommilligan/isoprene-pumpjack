@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='isoprene-pumpjack',
-    version='0.0.3',
+    version='0.0.4',
     license='Apache License 2.0',
     url='https://github.com/tommilligan/isoprene-pumpjack/',
     author='Tom Milligan',

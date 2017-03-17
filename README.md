@@ -1,7 +1,7 @@
 # isoprene-pumpjack
 
 [![PyPI](https://img.shields.io/pypi/pyversions/isoprene-pumpjack.svg)]()
-[![Documentation Status](http://isoprene-pumpjack.readthedocs.io/en/master/?badge=master)]()
+[![Documentation Status](https://readthedocs.org/projects/isoprene-pumpjack/badge/?version=master)](http://isoprene-pumpjack.readthedocs.io/en/master/?badge=master)
 [![license](https://img.shields.io/github/license/tommilligan/isoprene-pumpjack.svg)]()
 
 [![Travis branch](https://img.shields.io/travis/tommilligan/isoprene-pumpjack/develop.svg)]()
@@ -17,9 +17,13 @@ Install using pip
 pip install isoprene-pumpjack
 ```
 
-Run using
+Run in development:
 ```
 isoprene-pumpjack
+```
+or in production:
+```
+gunicorn isoprene_pumpjack.wsgi:app
 ```
 
 ## Required services
@@ -32,3 +36,9 @@ Configuration is via environment variables
     * ISOPRENE_PUMPJACK_BOLT_PASSWORD (*default: isoprenepumpjack*)
 * Elasticsearch
     * ISOPRENE_PUMPJACK_ELASTICSEARCH_URL (*default: http://localhost:9200/*)
+
+
+## Documentation
+
+The full documentation is available [here on readthedocs](http://isoprene-pumpjack.readthedocs.io/en/master/)
+
