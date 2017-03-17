@@ -3,10 +3,11 @@
 
 import logging
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Api
 from flask_cors import CORS
 
+from isoprene_pumpjack.exceptions import IsopumpException
 from isoprene_pumpjack.resources.discovery import Discovery
 from isoprene_pumpjack.resources.graphs import SubGraph, FullGraph
 from isoprene_pumpjack.resources.search import SearchDolphins, SeedGraph
@@ -19,6 +20,12 @@ from isoprene_pumpjack.resources.synaptic_scout_config import SynapticScoutConfi
 app = Flask(__name__)
 cors = CORS(app)
 api = Api(app)
+
+@app.errorhandler(IsopumpException)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
 
 # Dev only
 ## Neo
