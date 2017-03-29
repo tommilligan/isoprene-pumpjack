@@ -7,7 +7,6 @@ script:
   - nose2 --with-coverage
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - coveralls
   - codeclimate-test-reporter
 deploy:
   - provider: heroku
