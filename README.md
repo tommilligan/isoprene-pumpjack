@@ -1,13 +1,14 @@
 # isoprene-pumpjack
 
-[![PyPI](https://img.shields.io/pypi/pyversions/isoprene-pumpjack.svg)]()
+[![PyPI](https://img.shields.io/pypi/v/isoprene-pumpjack.svg)](https://pypi.python.org/pypi/isoprene-pumpjack)
+[![PyPI](https://img.shields.io/pypi/pyversions/isoprene-pumpjack.svg)](https://pypi.python.org/pypi/isoprene-pumpjack)
 [![Documentation Status](https://readthedocs.org/projects/isoprene-pumpjack/badge/?version=master)](http://isoprene-pumpjack.readthedocs.io/en/master/?badge=master)
-[![license](https://img.shields.io/github/license/tommilligan/isoprene-pumpjack.svg)]()
+[![license](https://img.shields.io/github/license/tommilligan/isoprene-pumpjack.svg)](https://pypi.python.org/pypi/isoprene-pumpjack)
 
-[![Travis branch](https://img.shields.io/travis/tommilligan/isoprene-pumpjack/develop.svg)]()
+[![Travis branch](https://img.shields.io/travis/tommilligan/isoprene-pumpjack/develop.svg)](https://travis-ci.org/tommilligan/isoprene-pumpjack)
 [![Coveralls branch](https://img.shields.io/coveralls/tommilligan/isoprene-pumpjack/develop.svg)]()
-[![Code Climate](https://img.shields.io/codeclimate/github/tommilligan/isoprene-pumpjack.svg)]()
-[![Requirements Status](https://requires.io/github/tommilligan/isoprene-pumpjack/requirements.svg?branch=develop)]()
+[![Code Climate](https://img.shields.io/codeclimate/github/tommilligan/isoprene-pumpjack.svg)](https://codeclimate.com/github/tommilligan/isoprene-pumpjack/)
+[![Requirements Status](https://requires.io/github/tommilligan/isoprene-pumpjack/requirements.svg?branch=develop)](https://codeclimate.com/github/tommilligan/synaptic-scout/)
 
 
 ## Installation
