@@ -11,7 +11,8 @@ isoprene-pumpjack
    :caption: Contents:
    
    installation
-   api
+   d3-json
+   api/index
 
 
 Indices and tables

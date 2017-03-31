@@ -60,7 +60,13 @@ class SubGraph(SmartResource):
     '''API endpoint to provide config JSON for synaptic-scout'''
 
     def get(self, central_node_id):
-        '''Get JSON representing subgraph centered on a single node'''
+        '''
+        Get JSON representing subgraph centered on a single node
+        
+        See :ref:`neo-d3-json-example`.        
+
+        :statuscode 200: OK
+        '''
         self.logger.debug('Getting sub graph for {0}'.format(central_node_id))
         sub_graph = get_sub_graph(central_node_id)
         return sub_graph, 200
@@ -70,7 +76,13 @@ class FullGraph(SmartResource):
     '''Provide all graph data from backend'''
 
     def get(self):
-        '''Get JSON representing full graph'''
+        '''
+        Get JSON representing full graph
+        
+        See :ref:`neo-d3-json-example`.        
+
+        :statuscode 200: OK
+        '''
         self.logger.debug('Getting full graph')
         full_graph = get_full_graph()
         return full_graph, 200

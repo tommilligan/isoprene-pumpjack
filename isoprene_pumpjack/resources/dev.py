@@ -41,7 +41,11 @@ class ResetDolphins(SmartResource):
     '''Debug endpoint - set neo4j as dolphins graph'''
 
     def get(self):
-        '''Drop database and upload dolphins JSON data into Neo4j'''
+        '''
+        Drop database and upload dolphins JSON data into Neo4j
+        
+        :statuscode 201: Neo4j graph loaded
+        '''
         self.logger.debug('Resetting neo4j to dolphins')
         reset_graph()
         set_graph(dolphins)
@@ -51,7 +55,11 @@ class NeoReset(SmartResource):
     '''Debug endpoint - reset neo4j'''
 
     def get(self):
-        '''Drop database'''
+        '''
+        Drop neo4j database
+        
+        :statuscode 204: Database dropped
+        '''
         self.logger.debug('Resetting neo4j')
         reset_graph()
         return {}, 204
@@ -95,7 +103,11 @@ class ElasticReset(SmartResource):
     '''Debug endpoint - reset elastic'''
 
     def get(self):
-        '''Drop database'''
+        '''
+        Drop elastic indexes
+        
+        :statuscode 204: Indexes dropped
+        '''
         self.logger.debug('Resetting elastic')
         reset_elastic()
         return {}, 204
@@ -105,7 +117,11 @@ class IndexDolphins(SmartResource):
     '''Debug endpoint - create an Elastic dolphins index'''
 
     def get(self):
-        '''Create and load dolphins index'''
+        '''
+        Create and load dolphins index
+        
+        :statuscode 201: Document index created
+        '''
         self.logger.debug('Indexing dolphins in elastic')
         reset_elastic()
         response = create_dolphins_index()

@@ -22,7 +22,13 @@ class SmartSubGraph(SmartResource):
     Otherwise, load the data from Elastic, then return it.'''
 
     def get(self, central_node_id):
-        '''Get JSON representing subgraph centered on a single node'''
+        '''
+        Get JSON representing subgraph centered on a single node
+
+        See :ref:`neo-d3-json-example`.        
+
+        :statuscode 200: OK
+        '''
         self.logger.debug('Smartly getting sub graph for {0}'.format(central_node_id))
 
         sub_graph = get_smart_subgraph(central_node_id)

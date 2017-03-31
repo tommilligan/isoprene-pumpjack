@@ -83,10 +83,49 @@ def seed_neo_graph(query_label):
     mark_fully_loaded(query_label)
 
 class SearchDolphins(SmartResource):
-    '''API endpoint to provide config JSON for synaptic-scout'''
+    '''Get raw search results'''
 
     def get(self):
-        '''Get documents containinga single dolphin by id and label'''
+        '''
+        Return the elastic results of a document search using query parameters.
+
+        **Example response**:
+
+        .. sourcecode:: http
+
+            HTTP/1.1 200 OK
+            Content-Type: application/json
+
+            [
+                {
+                    "_index": "dolphins",
+                    "_source": {
+                        "dolphins": [
+                            "Zap",
+                            "CCL"
+                        ]
+                    },
+                    "_id": "AVrDasjxocluSgWq6vsT",
+                    "_type": "dolphin_sighting",
+                    "_score": 2.6732156
+                },
+                {
+                    "_index": "dolphins",
+                    "_source": {
+                        "dolphins": [
+                            "Zap",
+                            "Double"
+                        ]
+                    },
+                    "_id": "AVrDasj8ocluSgWq6vsU",
+                    "_type": "dolphin_sighting",
+                    "_score": 2.6732156
+                }
+            ]
+
+        :query string label: id of dolphin to search documents for
+        :statuscode 200: OK
+        '''
         self.logger.debug('Searching dolphins')
         query_id = request.args.get('id', '')
         query_label = request.args.get('label', '')
@@ -96,10 +135,27 @@ class SearchDolphins(SmartResource):
 
 
 class SeedGraph(SmartResource):
-    '''Seed a node from elastic to neo and return the node id'''
+    '''Seed a single entity in the graph from document store'''
 
     def get(self):
-        '''Get documents containing a single dolphin by id and label'''
+        '''
+        Seed a node (and mentioning documents) from elastic to neo,
+        and return the node id
+
+        **Example response**:
+
+        .. sourcecode:: http
+
+            HTTP/1.1 201 CREATED
+            Content-Type: application/json
+            
+            {
+                "id": "Zap"
+            }
+
+        :query string label: id of dolphin to search documents for
+        :statuscode 201: Created graph node(s)
+        '''
         self.logger.debug('Seeding graph')
         query_label = request.args.get('label', '')
         seed_neo_graph(query_label)
