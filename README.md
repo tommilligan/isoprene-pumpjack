@@ -8,7 +8,7 @@
 [![Travis branch](https://img.shields.io/travis/tommilligan/isoprene-pumpjack/develop.svg)](https://travis-ci.org/tommilligan/isoprene-pumpjack)
 [![codecov](https://codecov.io/gh/tommilligan/isoprene-pumpjack/branch/develop/graph/badge.svg)](https://codecov.io/gh/tommilligan/isoprene-pumpjack)
 [![Code Climate](https://img.shields.io/codeclimate/github/tommilligan/isoprene-pumpjack.svg)](https://codeclimate.com/github/tommilligan/isoprene-pumpjack/)
-[![Requirements Status](https://requires.io/github/tommilligan/isoprene-pumpjack/requirements.svg?branch=develop)](https://codeclimate.com/github/tommilligan/synaptic-scout/)
+[![Requirements Status](https://requires.io/github/tommilligan/isoprene-pumpjack/requirements.svg?branch=develop)](https://requires.io/github/tommilligan/isoprene-pumpjack/requirements/?branch=develop)
 
 
 ## Installation

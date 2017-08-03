@@ -8,6 +8,7 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - codeclimate-test-reporter
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then curl -sSL https://download.sourceclear.com/ci.sh | bash; fi
 deploy:
   - provider: heroku
     api_key:
@@ -24,8 +25,6 @@ deploy:
       branch: master
       tags: true 
       condition: $TRAVIS_PYTHON_VERSION = "2.7"
-addons:
-  srcclr: true
 notifications:
   email: false
 
